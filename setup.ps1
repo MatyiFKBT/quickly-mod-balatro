@@ -136,7 +136,7 @@ switch($decision)
     function DisplayList
     {
       Clear-Host
-      Writee-Host "Select mods to install/upgrade:"
+      Write-Host "Select mods to install/upgrade:"
       Write-Host "Select an item using the up and down arrow keys, then press Space to mark it."
       Write-Host "Press Enter to confirm selection."
       for ($i = 0; $i -lt $baseMods.Count; $i++)
