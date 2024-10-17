@@ -9,6 +9,9 @@ This repository meant to be a simple guide on how to mod Balatro. This guide wil
 iwr -useb https://raw.githubusercontent.com/matyifkbt/quickly-mod-balatro/master/setup.ps1 | iex
 ```
 
+![image](https://github.com/user-attachments/assets/dea0b65e-6a03-4285-9600-0580ab43b944)
+
+
 ## Background
 
 I wanted to create a simple script that would allow me to easily install Lovely and Steamodded in order to mod the game, but I ended up creating a full-fledged tool that can be used to install some of my used mods too. I hope other modders will find it useful.
