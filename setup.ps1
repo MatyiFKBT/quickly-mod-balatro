@@ -15,16 +15,7 @@ Write-Host @"
             ██      ██  ██████  ██████  ██████  ██ ██   ████  ██████  
                                                                       
 "@                                                                      
-## PART 1 - Setup Lovely and Steamodded ##
-## Reference: https://github.com/Steamopollys/Steamodded/wiki/01.-Getting-started
-
-# TODO - Handle if the user has a custom Steam installation path
-$steamBasePath = "C:\Program Files (x86)\Steam"
-$gameName = "Balatro"
-$gamePath = "$steamBasePath\steamapps\common\$gameName"
-
-$lovelyURL = "https://github.com/ethangreen-dev/lovely-injector/releases/latest/download/lovely-x86_64-pc-windows-msvc.zip"
-
+## PART 0 - Check for installed stuff ##
 # Check if winget is installed, if not, install it using the Windows Package Manager
 $wingetPath = Get-Command winget -ErrorAction SilentlyContinue
 if ($null -eq $wingetPath)
@@ -42,18 +33,6 @@ if ($null -eq $wingetPath)
   Remove-Item "Setup.msix"
 }
 
-# Download the lovely injector to game directory and unzip it
-Write-Host "Downloading lovely injector to $gamePath... " -NoNewline
-Invoke-WebRequest -Uri $lovelyURL -OutFile "$gamePath\lovely.zip"
-Write-Host "done."
-
-Write-Host "Unzipping lovely injector... " -NoNewline
-Expand-Archive -Path "$gamePath\lovely.zip" -DestinationPath "$gamePath" -Force
-Write-Host "done."
-
-Remove-Item "$gamePath\lovely.zip"
-Write-Output "lovely injector installed."
-# Download Steamodded to %AppData%\Balatro\Mods using git
 # Check if git is installed, if not, install it using winget (Windows Package Manager)
 $gitPath = Get-Command git -ErrorAction SilentlyContinue
 if ($null -eq $gitPath)
@@ -61,6 +40,56 @@ if ($null -eq $gitPath)
   winget install -e --id Git.Git
 }
 
+$balatroID = "2379780"
+$debug = $false
+
+# Check if script is called with --debug or -d
+if ($args -contains "--debug" -or $args -contains "-d") {
+  $debug = $true
+}
+
+function Debug-Write($message) {
+  if ($debug) {
+    Write-Host $message
+  }
+}
+
+$notfound = $true
+$steaminstallpath = (Get-ItemProperty -Path HKCU:\SOFTWARE\Valve\Steam -ErrorVariable 'notfound' -ErrorAction Ignore).SteamPath
+if ($notfound) {
+  Write-Host "Steam install path not found in registry... if you have Steam installed, but still see this message, please open an issue on GitHub."
+}
+$applist = Get-Content "$steaminstallpath\steamapps\libraryfolders.vdf" -Raw
+$regexPattern = '(?s)"path"\s+"([^"]+)"\s+[^}]+?"apps"\s*\{[^}]+?"2379780"\s+'
+$match = [regex]::Match($applist, $regexPattern)
+
+if ($match.Success) {
+  $gamePath = $match.Groups[1].Value -replace '\\\\', '\'
+  $gamePath = "$gamePath\SteamApps\common\Balatro"
+} else {
+  Write-Host "Balatro not found in the file. Is Balatro installed? Please check, and if it is installed, feel free to open an issue on GitHub."
+  exit
+}
+Debug-Write "Balatro is installed at: ${gamePath}"
+
+## PART 1 - Setup Lovely and Steamodded ##
+## Reference: https://github.com/Steamopollys/Steamodded/wiki/01.-Getting-started
+
+$lovelyURL = "https://github.com/ethangreen-dev/lovely-injector/releases/latest/download/lovely-x86_64-pc-windows-msvc.zip"
+
+# Download the lovely injector to game directory and unzip it
+Write-Host "Downloading lovely injector to $gamePath... " -NoNewline
+Invoke-WebRequest -Uri $lovelyURL -OutFile "$gamePath\lovely.zip"
+Write-Host "done."
+
+Write-Host "Unzipping lovely injector... " -NoNewline
+Expand-Archive -Path "$gamePath\lovely.zip" -DestinationPath "$gamePath" -Force
+Write-Host "done." -ForegroundColor Green
+
+Remove-Item "$gamePath\lovely.zip"
+Write-Output "lovely injector installed."
+
+# Download Steamodded to %AppData%\Balatro\Mods using git
 # Clone the Steamodded repository to %AppData%\Balatro\Mods
 # if the directory already exists, just run git pull
 $modsPath = "$env:APPDATA\Balatro\Mods"
@@ -88,7 +117,7 @@ $exampleModsPath = "$modsPath\Steamodded\example_mods\Mods"
 Copy-Item "$exampleModsPath\AchievementsEnabler.lua" "$modsPath\AchievementsEnabler.lua" -Force
 Copy-Item "$exampleModsPath\MoreSpeeds.lua" "$modsPath\MoreSpeeds.lua" -Force
 
-Write-Output "Balatro modding setup complete."
+Write-Output "Steamodded setup complete."
 
 ## PART 2 - Install mods ##
 $question = "Would you like to install any mods? (y/N)"
