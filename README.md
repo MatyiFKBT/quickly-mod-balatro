@@ -26,6 +26,21 @@ These mods can be installed/upgraded using the script:
 | nh6574/JokerDisplay           | Display useful information about Jokers |
 | Balatro-Multiplayer/BalatroMultiplayer | Enable multiplayer functionality |
 
+## Unmodding
+
+If you want to remove installed mods and injector files, you can run the provided unmod script:
+
+```sh
+iwr -useb https://raw.githubusercontent.com/matyifkbt/quickly-mod-balatro/master/unmod.ps1 | iex
+```
+
+Flags:
+- `-Force` Skip confirmation prompt.
+- `-NoBackup` Do not create a timestamped backup of `%APPDATA%/Balatro/Mods`.
+- `-Debug` Verbose internal logging.
+
+After running, optionally verify integrity of game files in Steam for a fully clean install.
+
 ## Contributing
 
 If you have any suggestions or improvements, feel free to open an issue.
