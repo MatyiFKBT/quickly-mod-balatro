@@ -104,16 +104,27 @@ if (-not (Test-Path $modsPath))
 if (-not (Test-Path "$modsPath\Steamodded"))
 {
   Write-Output "Cloning Steamodded repository to $modsPath\Steamodded..."
-  git clone https://github.com/Steamopollys/Steamodded.git "$modsPath\Steamodded"
+  git clone https://github.com/Steamodded/smods.git "$modsPath\Steamodded"
 } else
 {
   Write-Output "Steamodded already cloned, pulling latest changes..."
   git -C "$modsPath\Steamodded" pull
 }
 
-# copy example_mods/Mods/AchievementsEnabler.lua and MoreSpeeds.lua to %AppData%\Balatro\Mods\Steamodded\Mods
+# Clone or update the Steamodded examples repository which now contains example mods
+if (-not (Test-Path "$modsPath\Steamodded-examples"))
+{
+  Write-Output "Cloning Steamodded examples repository to $modsPath\Steamodded-examples..."
+  git clone https://github.com/Steamodded/examples.git "$modsPath\Steamodded-examples"
+} else
+{
+  Write-Output "Steamodded examples already cloned, pulling latest changes..."
+  git -C "$modsPath\Steamodded-examples" pull
+}
+
+# copy example mods (AchievementsEnabler.lua and MoreSpeeds.lua) from the separate examples repo to %AppData%\Balatro\Mods
 # if the file already exists, overwrite it
-$exampleModsPath = "$modsPath\Steamodded\example_mods\Mods"
+$exampleModsPath = "$modsPath\Steamodded-examples\Mods"
 Copy-Item "$exampleModsPath\AchievementsEnabler.lua" "$modsPath\AchievementsEnabler.lua" -Force
 Copy-Item "$exampleModsPath\MoreSpeeds.lua" "$modsPath\MoreSpeeds.lua" -Force
 
