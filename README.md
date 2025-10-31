@@ -24,6 +24,7 @@ These mods can be installed/upgraded using the script:
 | ----------------------------- | --------------------------------------- |
 | DorkDad141/keyboard-shortcuts | Many useful keyboard shortcuts          |
 | nh6574/JokerDisplay           | Display useful information about Jokers |
+| Balatro-Multiplayer/BalatroMultiplayer | Enable multiplayer functionality |
 
 ## Contributing
 
