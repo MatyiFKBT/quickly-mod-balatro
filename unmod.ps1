@@ -1,13 +1,14 @@
 # This script attempts to "unmod" Balatro by removing
 # - The %APPDATA%\Balatro\Mods directory (backed up unless -Force)
 # - Lovely / Steamodded related injector files from the game directory (pattern based)
-# It DOES NOT verify game files via Steam. For a pristine restore you can also
-# run "Verify integrity of game files" in Steam after this script.
+# Optionally triggers Steam's built-in file validation if -Validate is passed.
+# (Uses steam://validate/2379780 URI; no completion signal is captured.)
 
 param(
   [switch]$Force,
   [switch]$NoBackup,
-  [switch]$Debug
+  [switch]$Debug,
+  [switch]$Validate
 )
 
 function Debug-Write($m){ if($Debug){ Write-Host $m -ForegroundColor DarkGray } }
@@ -93,4 +94,10 @@ if($candidateFiles.Count -gt 0){
   Write-Host " done." -ForegroundColor Green
 }
 
-Write-Host "Unmod operation complete. Consider verifying game files in Steam for a completely clean state." -ForegroundColor Green
+Write-Host "Unmod operation complete." -ForegroundColor Green
+if($Validate){
+  Write-Host "Launching Steam validation (steam://validate/2379780) ..." -ForegroundColor Cyan
+  try { Start-Process "steam://validate/2379780" } catch { Write-Host "Failed to launch Steam validation: $($_.Exception.Message)" -ForegroundColor Red }
+} else {
+  Write-Host "(Pass -Validate to automatically open Steam file verification.)" -ForegroundColor DarkGray
+}

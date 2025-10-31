@@ -38,6 +38,7 @@ Flags:
 - `-Force` Skip confirmation prompt.
 - `-NoBackup` Do not create a timestamped backup of `%APPDATA%/Balatro/Mods`.
 - `-Debug` Verbose internal logging.
+- `-Validate` Launch Steam's built-in file validation after cleanup.
 
 After running, optionally verify integrity of game files in Steam for a fully clean install.
 
