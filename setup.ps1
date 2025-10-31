@@ -142,7 +142,7 @@ switch($decision)
   { 
 
     # ask for user input to install some mods, using the $baseMods array
-    $baseMods = @("nh6574/JokerDisplay", "DorkDad141/keyboard-shortcuts")
+    $baseMods = @("nh6574/JokerDisplay", "DorkDad141/keyboard-shortcuts", "Balatro-Multiplayer/BalatroMultiplayer")
     $script:modsToInstall = [System.Collections.ArrayList]@()
 
     Write-Output "Would you like to install any of the following mods?"
