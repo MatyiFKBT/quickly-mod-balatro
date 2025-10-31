@@ -104,7 +104,7 @@ if (-not (Test-Path $modsPath))
 if (-not (Test-Path "$modsPath\Steamodded"))
 {
   Write-Output "Cloning Steamodded repository to $modsPath\Steamodded..."
-  git clone https://github.com/Steamopollys/Steamodded.git "$modsPath\Steamodded"
+  git clone https://github.com/Steamodded/smods.git "$modsPath\Steamodded"
 } else
 {
   Write-Output "Steamodded already cloned, pulling latest changes..."
